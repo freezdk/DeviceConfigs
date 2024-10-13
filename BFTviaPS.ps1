@@ -11,8 +11,8 @@ if ($confirmation -eq 'yes') {
         { winget install --id=EpicGames.EpicGamesLauncher -e --silent },
         { winget install --id=ElectronicArts.EADesktop -e --silent },
         { winget install --id=Ubisoft.Connect -e --silent },
-        { winget install --id=REALiX.HWiNFO -e --silent --location "C:\Program FilesBattle.net\" }
-        { winget install --id=7zip.7zipe -e --silent }
+        { winget install --id=Blizzard.BattleNet -e --silent --location "C:\Program Files\Battle.net\" }
+        { winget install --id=7zip.7zip -e --silent }
         { winget install --id=REALiX.HWiNFO -e --silent }
         { winget install --id=Mozilla.Firefox -e --silent }
         { winget install --id=Notepad++.Notepad++ -e --silent }

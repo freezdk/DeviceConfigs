@@ -25,6 +25,7 @@ if ($confirmation -eq 'yes') {
         { winget install --id=Nvidia.GeForceExperience -e --silent }
         { winget install --id=Telegram.TelegramDesktop -e --silent }
         { winget install --id=Discord.Discord -e --silent }
+        { winget install --id=Spotify.Spotify -e --silent }
     )
 
     # Execute each winget command

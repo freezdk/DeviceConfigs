@@ -41,7 +41,7 @@ if ($confirmation -eq 'yes') {
     Invoke-WebRequest -Uri $rockstarUrl -OutFile $downloadPath
     
     # Run Battle.net installer
-    # Note: Battle.net might not support silent installation. User interaction might be required.
+    # Note: Rockstar stinker til silent installer. Så det må du selv fixe....
     Start-Process -FilePath $downloadPath
 
     Write-Host "All gaming platforms installed!"

@@ -36,7 +36,7 @@ if ($confirmation -eq 'yes') {
 
  # Download Rockstar Games launcher
     $rockstarUrl = "https://gamedownloads.rockstargames.com/public/installer/Rockstar-Games-Launcher.exe"
-    $downloadPath = "%UserProfile%\Downloads\Rockstar-Games-Launcher.exe" # Make sure the directory exists or specify another path
+    $downloadPath = "c:\windows\temp\Rockstar-Games-Launcher.exe" # Make sure the directory exists or specify another path
     
     Invoke-WebRequest -Uri $rockstarUrl -OutFile $downloadPath
     

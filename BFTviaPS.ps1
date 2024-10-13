@@ -21,7 +21,6 @@ if ($confirmation -eq 'yes') {
         { winget install --id=VideoLAN.VLC -e --silent }
         { winget install --id=Ookla.Speedtest.Desktop -e --silent }
         { winget install --id=AgileBits.1Password -e --silent }
-        { winget install --id=Corsair.iCUE.5 -e --silent }
         { winget install --id=Nvidia.GeForceExperience -e --silent }
         { winget install --id=Telegram.TelegramDesktop -e --silent }
         { winget install --id=Discord.Discord -e --silent }

@@ -1,3 +1,6 @@
+# We need to allow this once.
+Set-ExecutionPolicy Bypass -Scope Process -Force
+
 # Prompt user for confirmation
 $confirmation = Read-Host "Is this a gaming PC? (yes/no)"
 

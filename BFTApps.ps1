@@ -80,3 +80,5 @@ foreach ($command in $wingetCommands) {
 }
 
 
+Read-Host "Insallation has finished, press any key to close..."
+

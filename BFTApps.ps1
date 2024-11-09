@@ -75,6 +75,7 @@ if ($devToolsPreference -eq 'y') {
         @{ id = "Docker.DockerDesktop"; command = { winget install --id=Docker.DockerDesktop -e --silent } },
         @{ id = "Microsoft.PowerShell"; command = { winget install --id=Microsoft.PowerShell -e --silent } },
         @{ id = "Oracle.JavaRuntimeEnvironment"; command = { winget install --id=Oracle.JavaRuntimeEnvironment -e --silent } }
+        @{ id = "Microsoft.DotNet.SDK.8"; command = { winget install --id=Microsoft.DotNet.SDK.8 -e --silent } }  # .NET SDK installation
     )
 }
 

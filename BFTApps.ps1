@@ -1,7 +1,19 @@
 # Function to check if an application is installed using winget
 function Is-Installed ($appId) {
     $installedApps = winget list
-    return $installedApps -match $appId
+    return $installedApps -like "*$appId*"
+}
+
+# Function to upgrade an application using winget if it's already installed
+function Install-Or-Upgrade ($app) {
+    if (Is-Installed $app.id) {
+        Write-Host "$($app.id) is already installed. Attempting upgrade..."
+        & winget upgrade --id=$app.id -e --silent
+    } else {
+        Write-Host "Installing $($app.id)..."
+        & $app.command
+    }
+    Write-Host "$($app.id) installation or upgrade complete."
 }
 
 # Initialize empty arrays for optional components
@@ -112,15 +124,9 @@ if ($nvidiaPresent) {
     $wingetCommands += @{ id = "Nvidia.GeForceExperience"; command = { winget install --id=Nvidia.GeForceExperience -e --silent } }
 }
 
-# Execute each winget command only if the application is not already installed
+# Execute each winget command only if the application is not already installed, otherwise upgrade
 foreach ($app in $wingetCommands) {
-    if (-not (Is-Installed $app.id)) {
-        Write-Host "Installing $($app.id)..."
-        & $app.command
-        Write-Host "$($app.id) installed."
-    } else {
-        Write-Host "$($app.id) is already installed. Skipping..."
-    }
+    Install-Or-Upgrade $app
 }
 
 Read-Host "Installation has finished, press any key to close..."

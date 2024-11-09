@@ -95,6 +95,23 @@ if ($confirmationChar -eq 'y') {
         @{ id = "Ubisoft.Connect"; command = { winget install --id=Ubisoft.Connect -e --silent } },
         @{ id = "Blizzard.BattleNet"; command = { winget install --id=Blizzard.BattleNet -e --silent --location "C:\Program Files\Battle.net\" } }
     )
+
+  # Check if Rockstar Games Launcher is already installed
+  if (-not (Is-Installed "Rockstar Games Launcher")) {
+    Write-Host "Rockstar Games Launcher not detected. Downloading and installing..."
+    
+    # Use the user's Temp folder for the download path
+    $downloadPath = "$env:TEMP\Rockstar-Games-Launcher.exe"
+    $rockstarUrl = "https://gamedownloads.rockstargames.com/public/installer/Rockstar-Games-Launcher.exe"
+    Invoke-WebRequest -Uri $rockstarUrl -OutFile $downloadPath
+
+    # Start the Rockstar Games Launcher installer
+    Write-Host "Installing Rockstar Games Launcher..."
+    Start-Process -FilePath $downloadPath -Wait
+    } 
+    else {
+        Write-Host "Rockstar Games Launcher is already installed. Skipping download and installation."
+    }
 }
 
 # Define non-gaming specific utility apps
@@ -129,4 +146,4 @@ foreach ($app in $wingetCommands) {
     Install-Or-Upgrade $app
 }
 
-Read-Host "Installation has finished, press any key to close..."
+Write-Host "Installation has finished..."

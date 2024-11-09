@@ -21,23 +21,18 @@ $devTools = @()
 $wingetGamingCommands = @()
 
 # Check for NVIDIA GPU
-$nvidiaPresent = Get-WmiObject Win32_VideoController | Where-Object { $_.Name -match "NVIDIA" }
-if ($nvidiaPresent) {
-    Write-Host "Nvidia GPU detected!"
-} else {
-    Write-Host "No Nvidia GPU detected!"
-}
-
 # Detect and list all available GPUs
 $gpus = Get-WmiObject Win32_VideoController
-if ($gpus) {
-    Write-Host "Detected GPU(s):"
-    foreach ($gpu in $gpus) {
-        Write-Host "- $($gpu.Name)"
-    }
-} else {
-    Write-Host "No GPU detected!"
+$gpuNames = $gpus | ForEach-Object { $_.Name }
+Write-Host "Detected GPU(s):"
+foreach ($gpu in $gpuNames) {
+    Write-Host "- $gpu"
 }
+
+# Determine if AMD or NVIDIA software should be installed based on detected GPUs
+$amdDetected = $gpuNames -match "AMD"
+$nvidiaDetected = $gpuNames -match "NVIDIA"
+
 
 # Prompt user for Dark Mode preference
 $darkModePreference = Read-Host "Would you like to enable Dark Mode? (Y/n)"
@@ -138,8 +133,42 @@ if ($install1PassChar -eq 'y') {
 if ($installSteelChar -eq 'y') {
     $wingetCommands += @{ id = "SteelSeries.GG"; command = { winget install --id=SteelSeries.GG -e --silent } }
 }
-if ($nvidiaPresent) {
-    $wingetCommands += @{ id = "Nvidia.GeForceExperience"; command = { winget install --id=Nvidia.GeForceExperience -e --silent } }
+# Install AMD Adrenalin if an AMD GPU is detected
+if ($amdDetected) {
+    Write-Host "AMD GPU detected! Preparing to install AMD Adrenalin software."
+
+    # Define the AMD Adrenalin download URL
+    $amdUrl = "https://drivers.amd.com/drivers/auto-detect-tool.exe"
+    $amdDownloadPath = "$env:TEMP\AMD-Adrenalin-Installer.exe"
+
+    # Download the installer if not already downloaded
+    if (-not (Test-Path $amdDownloadPath)) {
+        Write-Host "Downloading AMD Adrenalin installer..."
+        Invoke-WebRequest -Uri $amdUrl -OutFile $amdDownloadPath
+    } else {
+        Write-Host "AMD Adrenalin installer already downloaded."
+    }
+
+    # Start the AMD Adrenalin installer
+    Write-Host "Installing AMD Adrenalin..."
+    Start-Process -FilePath $amdDownloadPath -Wait
+} else {
+    Write-Host "No AMD GPU detected. Skipping AMD Adrenalin installation."
+}
+
+# Install NVIDIA GeForce Experience if an NVIDIA GPU is detected
+if ($nvidiaDetected) {
+    Write-Host "NVIDIA GPU detected! Preparing to install NVIDIA GeForce Experience."
+
+    # Add NVIDIA GeForce Experience to installation list if not already installed
+    if (-not (Is-Installed "Nvidia.GeForceExperience")) {
+        $nvidiaInstall = @{ id = "Nvidia.GeForceExperience"; command = { winget install --id=Nvidia.GeForceExperience -e --silent } }
+        Install-Or-Upgrade $nvidiaInstall
+    } else {
+        Write-Host "NVIDIA GeForce Experience is already installed. Skipping installation."
+    }
+} else {
+    Write-Host "No NVIDIA GPU detected. Skipping NVIDIA GeForce Experience installation."
 }
 
 # Execute each winget command only if the application is not already installed, otherwise upgrade
